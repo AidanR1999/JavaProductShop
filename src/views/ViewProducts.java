@@ -38,13 +38,17 @@ public class ViewProducts extends javax.swing.JFrame {
         
         int orderId = customer.generateUniqueOrderId();
         currentOrder.setOrderId(orderId);
-        customer.addOrder(currentOrder);
+        
         
         if(!customer.isIsRegistered())
         {
             cmdAddToBasket.setEnabled(false);
             cmdViewBasket.setEnabled(false);
             cmbQuantity.setEnabled(false);
+        }
+        else
+        {
+            customer.addOrder(currentOrder);
         }
     }
 
