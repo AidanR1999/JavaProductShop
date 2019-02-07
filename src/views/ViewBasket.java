@@ -8,6 +8,7 @@ package views;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import models.Customer;
+import models.DBManager;
 import models.Order;
 import models.OrderLine;
 
@@ -62,6 +63,7 @@ public class ViewBasket extends javax.swing.JFrame {
         cmdPurchase = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         lblTotal = new javax.swing.JLabel();
+        lblErrorMessage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -83,6 +85,11 @@ public class ViewBasket extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblProducts);
 
         cmdRemoveProduct.setText("Remove Product");
+        cmdRemoveProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdRemoveProductActionPerformed(evt);
+            }
+        });
 
         cmdPurchase.setText("Purchase");
         cmdPurchase.addActionListener(new java.awt.event.ActionListener() {
@@ -94,6 +101,8 @@ public class ViewBasket extends javax.swing.JFrame {
         jLabel1.setText("Total:");
 
         lblTotal.setText("jLabel2");
+
+        lblErrorMessage.setForeground(new java.awt.Color(255, 0, 0));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -117,7 +126,10 @@ public class ViewBasket extends javax.swing.JFrame {
                                 .addGap(22, 22, 22))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(158, 158, 158)
-                        .addComponent(cmdPurchase)))
+                        .addComponent(cmdPurchase))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(176, 176, 176)
+                        .addComponent(lblErrorMessage)))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -134,7 +146,9 @@ public class ViewBasket extends javax.swing.JFrame {
                     .addComponent(jLabel1))
                 .addGap(10, 10, 10)
                 .addComponent(cmdPurchase)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblErrorMessage)
+                .addContainerGap())
         );
 
         pack();
@@ -147,8 +161,36 @@ public class ViewBasket extends javax.swing.JFrame {
     }//GEN-LAST:event_cmdBackActionPerformed
 
     private void cmdPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdPurchaseActionPerformed
-        // TODO add your handling code here:
+        order.setStatus("Complete");
+        
+        DBManager db = new DBManager();
+        db.completeOrder(order.getOrderId());
+        
+        Confirmation confirmation = new Confirmation(customer);
+        this.dispose();
+        confirmation.setVisible(true);
     }//GEN-LAST:event_cmdPurchaseActionPerformed
+
+    private void cmdRemoveProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdRemoveProductActionPerformed
+        if(tblProducts.getSelectedRow() == -1)
+        {
+            lblErrorMessage.setText("Error: Select a product");
+        }
+        else
+        {
+            DefaultTableModel basketModel = (DefaultTableModel) tblProducts.getModel();
+            int productId = Integer.parseInt(String.valueOf(basketModel.getValueAt(tblProducts.getSelectedRow(), 0)));
+            
+            order.removeOrderLine(productId);
+            lblErrorMessage.setText("Product removed from basket");
+            
+            DefaultTableModel basket = (DefaultTableModel) tblProducts.getModel();
+            basket.removeRow(tblProducts.getSelectedRow());
+            
+            tblProducts.setModel(basket);
+            lblTotal.setText("£" + String.format("%.02f", order.getOrderTotal()));
+        }
+    }//GEN-LAST:event_cmdRemoveProductActionPerformed
 
     /**
      * @param args the command line arguments
@@ -191,6 +233,7 @@ public class ViewBasket extends javax.swing.JFrame {
     private javax.swing.JButton cmdRemoveProduct;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblErrorMessage;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tblProducts;
     // End of variables declaration//GEN-END:variables

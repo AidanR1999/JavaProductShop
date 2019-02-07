@@ -2,6 +2,7 @@ package models;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class Order {
@@ -116,5 +117,25 @@ public class Order {
         
         DBManager db = new DBManager();
         db.updateOrderTotal(orderId, orderTotal);
+    }
+    
+    //REMOVE ORDERLINE
+    public void removeOrderLine(int productId)
+    {
+        Iterator<Map.Entry<Integer, OrderLine>> iter = orderLines.entrySet().iterator();
+        while(iter.hasNext())
+        {
+            OrderLine actualOrderLine = iter.next().getValue();
+            if(actualOrderLine.getProduct().getProductID() == productId)
+            {
+                int orderLineId = actualOrderLine.getOrderLineId();
+                DBManager db = new DBManager();
+                db.deleteOrderLine(orderLineId);
+                
+                iter.remove();
+                
+                calculateOrderTotal();
+            }
+        }
     }
 }

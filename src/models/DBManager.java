@@ -410,4 +410,43 @@ public class DBManager
             System.out.println("Error updating ordertotal to database");
         }        
     }
+    
+    public void completeOrder(int orderId)
+    {
+        try 
+        {
+            Class.forName(driver);
+            Connection conn = DriverManager.getConnection(connectionString);
+            Statement sql = conn.createStatement();
+            
+            sql.executeUpdate
+                    ("UPDATE Orders " 
+                    + "SET Status = 'Complete' "
+                    + "WHERE OrderId = '" + orderId + "'");
+            
+            conn.close();
+        } 
+        catch (Exception e)
+        {
+             System.out.println("Error completing order");
+        }
+    }
+    
+    public void deleteOrderLine(int orderLineId)
+    {
+        try {
+            Class.forName(driver);
+            Connection conn = DriverManager.getConnection(connectionString);
+            Statement sql = conn.createStatement();
+            
+            sql.executeUpdate
+                    ("DELETE FROM OrderLines "
+                    + "WHERE OrderLineId = '" + orderLineId + "'");
+            
+        } 
+        catch (Exception e) 
+        {
+             System.out.println("Error deleting order line from database");
+        }
+    }
 }
