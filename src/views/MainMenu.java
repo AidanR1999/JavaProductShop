@@ -111,7 +111,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_cmdStaffLoginActionPerformed
 
     private void cmdViewProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdViewProductsActionPerformed
-        ViewProducts vp = new ViewProducts(new Customer());
+        ViewProducts vp = new ViewProducts(new Customer(), null);
         this.dispose();
         vp.setVisible(true);
     }//GEN-LAST:event_cmdViewProductsActionPerformed

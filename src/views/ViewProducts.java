@@ -22,17 +22,22 @@ public class ViewProducts extends javax.swing.JFrame {
 
     private static Customer customer;
     private HashMap<Integer, Product> products;
-    private Order currentOrder;
+    private static Order currentOrder;
     
     /**
      * Creates new form ViewProducts
      */
-    public ViewProducts(Customer c) {
+    public ViewProducts(Customer c, Order o) {
         this.customer = c;
         
         DBManager db = new DBManager();
         products = db.loadProducts();
-        currentOrder = new Order();
+        currentOrder = o;
+        
+        if(currentOrder == null)
+        {
+            currentOrder = new Order();
+        }
         
         initComponents();
         
@@ -284,7 +289,7 @@ public class ViewProducts extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ViewProducts(customer).setVisible(true);
+                new ViewProducts(customer, currentOrder).setVisible(true);
             }
         });
     }

@@ -129,7 +129,7 @@ public class CustomerHome extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        ViewProducts vp = new ViewProducts(customer);
+        ViewProducts vp = new ViewProducts(customer, null);
         this.dispose();
         vp.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
