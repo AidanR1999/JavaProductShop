@@ -141,7 +141,9 @@ public class ViewBasket extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
-        // TODO add your handling code here:
+        ViewProducts vp = new ViewProducts(customer);
+        this.dispose();
+        vp.setVisible(true);
     }//GEN-LAST:event_cmdBackActionPerformed
 
     private void cmdPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdPurchaseActionPerformed
