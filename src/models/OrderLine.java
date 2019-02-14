@@ -9,11 +9,17 @@ public class OrderLine {
     private double lineTotal;
     
     //CONSTRUCTORS
-    public OrderLine(int orderLineId, Product product, int quantity) {
+    public OrderLine(Order order, Product product){
+        this.orderLineId = order.generateUniqueOrderLineId();
+        this.product = product;
+        this.quantity = 1;
+        this.lineTotal = product.getPrice();
+    }
+    public OrderLine(int orderLineId, Product product, int quantity, double lineTotal) {
         this.orderLineId = orderLineId;
         this.product = product;
         this.quantity = quantity;
-        this.lineTotal = product.getPrice() * this.quantity;
+        this.lineTotal = lineTotal;
     }
     
     //GETTERS AND SETTERS

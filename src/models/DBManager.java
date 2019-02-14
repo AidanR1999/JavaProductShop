@@ -5,7 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 public class DBManager
 {
@@ -49,6 +51,8 @@ public class DBManager
         }
         finally
         {
+            customers = loadCustomerOrders(customers);
+            customers = loadCustomerOrderLines(customers);
             return customers;
         }
     }
@@ -447,6 +451,83 @@ public class DBManager
         catch (Exception e) 
         {
              System.out.println("Error deleting order line from database");
+        }
+    }
+    
+    public HashMap<String, Customer> loadCustomerOrders(HashMap<String, Customer> customers)
+    {
+        try
+        {
+            Class.forName(driver);
+            Connection conn = DriverManager.getConnection(connectionString);
+            Statement sql = conn.createStatement();
+            
+            ResultSet rs = sql.executeQuery("SELECT * FROM Orders");
+            
+            while(rs.next())
+            {
+                int orderId = rs.getInt("OrderId");
+                Date orderDate = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("OrderDate"));
+                String customer = rs.getString("Username");
+                double orderTotal = rs.getDouble("OrderTotal");
+                String status = rs.getString("Status");
+                
+                Customer customerWithOrder = customers.get(customer);
+                Order loadedOrder = new Order(orderId, orderDate, customerWithOrder, orderTotal, status);
+                
+                customerWithOrder.getOrders().put(orderId, loadedOrder);
+            }
+        }
+        catch (Exception e) 
+        {
+            System.out.println("Error loading orders from database");
+        }
+        finally
+        {
+            return customers;
+        }
+    }
+    
+    public HashMap<String, Customer> loadCustomerOrderLines(HashMap<String, Customer> customers)
+    {
+        try
+        {
+            Class.forName(driver);
+            Connection conn = DriverManager.getConnection(connectionString);
+            Statement sql = conn.createStatement();
+            
+            ResultSet rs = sql.executeQuery("SELECT * FROM OrderLines");
+            
+            while(rs.next())
+            {
+                int orderLineId = rs.getInt("OrderLineId");
+                int productId = rs.getInt("ProductId");
+                int quantity = rs.getInt("Quantity");
+                double lineTotal = rs.getDouble("LineTotal");
+                int orderId = rs.getInt("OrderId");
+                
+                for(Map.Entry<String, Customer> cEntry : customers.entrySet())
+                {
+                    Customer customer = cEntry.getValue();
+                    if(customer.getOrders().containsKey(orderId))
+                    {
+                        Order orderForOrderLine = customer.getOrders().get(orderId);
+                        
+                        Product product = loadProducts().get(productId);
+                        OrderLine orderLine = new OrderLine(orderLineId, product, quantity, lineTotal);
+                        
+                        orderForOrderLine.getOrderLines().put(orderLineId, orderLine);
+                    }
+                }
+            }
+        }
+        catch (Exception e) 
+        {
+            System.out.println("Error loading orders from database");
+        }
+        finally
+        {
+            return customers;
         }
     }
 }

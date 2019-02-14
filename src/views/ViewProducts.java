@@ -238,7 +238,7 @@ public class ViewProducts extends javax.swing.JFrame {
             
             int quantity = Integer.parseInt(String.valueOf(cmbQuantity.getSelectedItem()));
             
-            OrderLine ol = new OrderLine(currentOrder.generateUniqueOrderLineId(), product, quantity);
+            OrderLine ol = new OrderLine(currentOrder, product);
             currentOrder.addOrderLine(ol);
             
             lblErrorMessage.setText("Product added to basket!");

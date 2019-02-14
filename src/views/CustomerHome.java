@@ -35,43 +35,48 @@ public class CustomerHome extends javax.swing.JFrame {
     private void initComponents() {
 
         lblWelcome = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        cmdBrowseProducts = new javax.swing.JButton();
+        cmdViewOrders = new javax.swing.JButton();
+        cmdEditDetails = new javax.swing.JButton();
+        cmdUnregister = new javax.swing.JButton();
+        cmdLogout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         lblWelcome.setText("Welcome");
 
-        jButton1.setText("Browse Products");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        cmdBrowseProducts.setText("Browse Products");
+        cmdBrowseProducts.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                cmdBrowseProductsActionPerformed(evt);
             }
         });
 
-        jButton2.setText("View my orders");
-
-        jButton3.setText("Edit details");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        cmdViewOrders.setText("View my orders");
+        cmdViewOrders.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                cmdViewOrdersActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Unregister from shop");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        cmdEditDetails.setText("Edit details");
+        cmdEditDetails.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                cmdEditDetailsActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Log out");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        cmdUnregister.setText("Unregister from shop");
+        cmdUnregister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                cmdUnregisterActionPerformed(evt);
+            }
+        });
+
+        cmdLogout.setText("Log out");
+        cmdLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdLogoutActionPerformed(evt);
             }
         });
 
@@ -81,24 +86,24 @@ public class CustomerHome extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(cmdEditDetails)
                 .addGap(153, 153, 153))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton5)
+                        .addComponent(cmdLogout)
                         .addGap(56, 56, 56)
                         .addComponent(lblWelcome))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(131, 131, 131)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton4)
+                            .addComponent(cmdUnregister)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton1)
-                                    .addComponent(jButton2))))))
+                                    .addComponent(cmdBrowseProducts)
+                                    .addComponent(cmdViewOrders))))))
                 .addContainerGap(118, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -107,47 +112,53 @@ public class CustomerHome extends javax.swing.JFrame {
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblWelcome)
-                    .addComponent(jButton5))
+                    .addComponent(cmdLogout))
                 .addGap(42, 42, 42)
-                .addComponent(jButton1)
+                .addComponent(cmdBrowseProducts)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
+                .addComponent(cmdViewOrders)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
+                .addComponent(cmdEditDetails)
                 .addGap(18, 18, 18)
-                .addComponent(jButton4)
+                .addComponent(cmdUnregister)
                 .addContainerGap(45, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void cmdLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLogoutActionPerformed
         CustomerLogin cl = new CustomerLogin();
         this.dispose();
         cl.setVisible(true);
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_cmdLogoutActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void cmdBrowseProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBrowseProductsActionPerformed
         ViewProducts vp = new ViewProducts(customer, null);
         this.dispose();
         vp.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_cmdBrowseProductsActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void cmdEditDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdEditDetailsActionPerformed
         EditCustomer ec = new EditCustomer(customer);
         this.dispose();
         ec.setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_cmdEditDetailsActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void cmdUnregisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdUnregisterActionPerformed
         DBManager db = new DBManager();
         db.deleteCustomer(customer);
         
         MainMenu mm = new MainMenu();
         this.dispose();
         mm.setVisible(true);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_cmdUnregisterActionPerformed
+
+    private void cmdViewOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdViewOrdersActionPerformed
+        CustomerPreviousOrder cpo = new CustomerPreviousOrder(customer);
+        this.dispose();
+        cpo.setVisible(true);
+    }//GEN-LAST:event_cmdViewOrdersActionPerformed
 
     /**
      * @param args the command line arguments
@@ -185,11 +196,11 @@ public class CustomerHome extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton cmdBrowseProducts;
+    private javax.swing.JButton cmdEditDetails;
+    private javax.swing.JButton cmdLogout;
+    private javax.swing.JButton cmdUnregister;
+    private javax.swing.JButton cmdViewOrders;
     private javax.swing.JLabel lblWelcome;
     // End of variables declaration//GEN-END:variables
 }

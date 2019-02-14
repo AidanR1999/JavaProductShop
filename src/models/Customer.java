@@ -74,6 +74,14 @@ public class Customer extends User{
         this.isRegistered = isRegistered;
     }
     
+    //ORDERS
+    public HashMap<Integer, Order> getOrders() {
+        return orders;
+    }
+    public void setOrders(HashMap<Integer, Order> orders) {
+        this.orders = orders;
+    }
+    
     //METHODS AND FUNCTIONS
     //DISPLAY GREETING FOR CUSTOMER HOME
     public String displayGreeting(){

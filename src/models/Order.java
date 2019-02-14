@@ -10,6 +10,7 @@ public class Order {
     //ATTRIBUTES
     private int orderId;
     private Date orderDate;
+    private Customer customer;
     private double orderTotal;
     private String status;
     private HashMap<Integer, OrderLine> orderLines;
@@ -19,14 +20,16 @@ public class Order {
     {
         this.orderId = 0;
         this.orderDate = new Date();
+        this.customer = new Customer();
         this.orderTotal = 0.00;
         this.status = "";
         this.orderLines = new HashMap();
     }
-    public Order(int orderId, Date orderDate, double orderTotal, String status)
+    public Order(int orderId, Date orderDate, Customer customer, double orderTotal, String status)
     {
         this.orderId = orderId;
         this.orderDate = orderDate;
+        this.customer = customer;
         this.orderTotal = orderTotal;
         this.status = status;
         this.orderLines = new HashMap();
@@ -47,6 +50,14 @@ public class Order {
     }
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
+    }
+    
+    //CUSTOMER
+    public Customer getCustomer(){
+        return customer;
+    }
+    public void setCustomer(Customer customer){
+        this.customer = customer;
     }
     
     //ORDER TOTAL
