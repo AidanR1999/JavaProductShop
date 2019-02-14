@@ -134,7 +134,7 @@ public class CustomerHome extends javax.swing.JFrame {
     }//GEN-LAST:event_cmdLogoutActionPerformed
 
     private void cmdBrowseProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBrowseProductsActionPerformed
-        ViewProducts vp = new ViewProducts(customer, null);
+        ViewProducts vp = new ViewProducts(customer);
         this.dispose();
         vp.setVisible(true);
     }//GEN-LAST:event_cmdBrowseProductsActionPerformed

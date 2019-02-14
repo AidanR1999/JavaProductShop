@@ -27,23 +27,13 @@ public class ViewProducts extends javax.swing.JFrame {
     /**
      * Creates new form ViewProducts
      */
-    public ViewProducts(Customer c, Order o) {
+    public ViewProducts(Customer c) {
         this.customer = c;
         
         DBManager db = new DBManager();
         products = db.loadProducts();
-        currentOrder = o;
-        
-        if(currentOrder == null)
-        {
-            currentOrder = new Order();
-        }
         
         initComponents();
-        
-        int orderId = customer.generateUniqueOrderId();
-        currentOrder.setOrderId(orderId);
-        
         
         if(!customer.isIsRegistered())
         {
@@ -53,7 +43,7 @@ public class ViewProducts extends javax.swing.JFrame {
         }
         else
         {
-            customer.addOrder(currentOrder);
+            currentOrder = customer.findLatestOrder();
         }
     }
 
@@ -289,7 +279,7 @@ public class ViewProducts extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ViewProducts(customer, currentOrder).setVisible(true);
+                new ViewProducts(customer).setVisible(true);
             }
         });
     }

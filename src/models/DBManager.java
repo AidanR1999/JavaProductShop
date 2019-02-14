@@ -467,7 +467,11 @@ public class DBManager
             while(rs.next())
             {
                 int orderId = rs.getInt("OrderId");
-                Date orderDate = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("OrderDate"));
+                
+                String orderDateStr = rs.getString("OrderDate");
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date orderDate = format.parse(orderDateStr);
+                
                 String customer = rs.getString("Username");
                 double orderTotal = rs.getDouble("OrderTotal");
                 String status = rs.getString("Status");
