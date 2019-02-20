@@ -10,40 +10,60 @@ import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import models.Customer;
 import models.Order;
+import models.OrderLine;
+import models.Product;
+import models.Staff;
+import models.User;
+
 
 /**
  *
  * @author Aidan
  */
-public class CustomerPreviousOrder extends javax.swing.JFrame {
+public class ViewPreviousOrderLines extends javax.swing.JFrame {
 
-    
+    private static User user;
     private static Customer customer;
+    private static int orderId;
     
     /**
      * Creates new form CustomerPreviousOrder
      */
-    public CustomerPreviousOrder(Customer c) {
-        customer = c;
+    public ViewPreviousOrderLines(User u, int orderId, Customer c) {
+        this.user = u;
+        this.customer = c;
+        this.orderId = orderId;
+        
         initComponents();
         
-        DefaultTableModel orders = (DefaultTableModel) tblOrders.getModel();
+        DefaultTableModel orderLines = (DefaultTableModel) tblOrderLines.getModel();
         
-        for(Map.Entry<Integer, Order> oEntry : customer.getOrders().entrySet())
+        Order order = customer.getOrders().get(orderId);
+        
+        for(Map.Entry<Integer, OrderLine> olEntry : order.getOrderLines().entrySet())
         {
-            Order actualOrder = oEntry.getValue();
+            OrderLine orderLine = olEntry.getValue();
+            Product product = orderLine.getProduct();
             
-            if(actualOrder.getStatus().equals("Complete"))
+            String productId = "";
+            String productName = "";
+            String price = "";
+            
+            if(product.getProductID() == 0)
             {
-                orders.addRow(new Object[] {
-                    actualOrder.getOrderId(),
-                    new SimpleDateFormat("dd/MM/yyyy").format(actualOrder.getOrderDate()),
-                    "£" + String.format("%.02f", actualOrder.getOrderTotal())
-                });
+                productId = "Not available";
+                productName = "Not available";
+                price = "Not available";
             }
+            else
+            {
+                productId = String.valueOf(product.getProductID());
+                productName = product.toString();
+                price = "£" + String.format("%.02f", product.getPrice());
+            }
+            
+            orderLines.addRow(new Object[] { productId, productName, price });
         }
-        
-        tblOrders.setModel(orders);
     }
 
     /**
@@ -57,8 +77,8 @@ public class CustomerPreviousOrder extends javax.swing.JFrame {
 
         cmdBack = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblOrders = new javax.swing.JTable();
-        cmdViewOrder = new javax.swing.JButton();
+        tblOrderLines = new javax.swing.JTable();
+        lblError = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,39 +89,39 @@ public class CustomerPreviousOrder extends javax.swing.JFrame {
             }
         });
 
-        tblOrders.setModel(new javax.swing.table.DefaultTableModel(
+        tblOrderLines.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Order Id", "Date", "Total"
+                "Product Id", "Product", "Price"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tblOrders);
+        jScrollPane1.setViewportView(tblOrderLines);
 
-        cmdViewOrder.setText("View Order");
+        lblError.setForeground(new java.awt.Color(255, 51, 51));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cmdViewOrder)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(cmdBack))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(cmdBack))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblError)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
@@ -111,19 +131,26 @@ public class CustomerPreviousOrder extends javax.swing.JFrame {
                 .addGap(14, 14, 14)
                 .addComponent(cmdBack, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmdViewOrder)
-                .addGap(22, 22, 22))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                .addGap(44, 44, 44)
+                .addComponent(lblError)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
-        CustomerHome ch = new CustomerHome(customer);
-        this.dispose();
-        ch.setVisible(true);
+        if(user.getClass().getName().equals("models.Customer"))
+        {
+            CustomerPreviousOrders cpo = new CustomerPreviousOrders((Customer) user);
+            this.dispose();
+            cpo.setVisible(true);
+        }
+        else
+        {
+            StaffViewOrders avo = new StaffViewOrders((Staff) user);
+        }
     }//GEN-LAST:event_cmdBackActionPerformed
 
     /**
@@ -143,28 +170,35 @@ public class CustomerPreviousOrder extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CustomerPreviousOrder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewPreviousOrderLines.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CustomerPreviousOrder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewPreviousOrderLines.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CustomerPreviousOrder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewPreviousOrderLines.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CustomerPreviousOrder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewPreviousOrderLines.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CustomerPreviousOrder(customer).setVisible(true);
+                new ViewPreviousOrderLines(user, orderId, customer).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cmdBack;
-    private javax.swing.JButton cmdViewOrder;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblOrders;
+    private javax.swing.JLabel lblError;
+    private javax.swing.JTable tblOrderLines;
     // End of variables declaration//GEN-END:variables
 }

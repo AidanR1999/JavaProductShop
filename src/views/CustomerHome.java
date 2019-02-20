@@ -155,7 +155,7 @@ public class CustomerHome extends javax.swing.JFrame {
     }//GEN-LAST:event_cmdUnregisterActionPerformed
 
     private void cmdViewOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdViewOrdersActionPerformed
-        CustomerPreviousOrder cpo = new CustomerPreviousOrder(customer);
+        CustomerPreviousOrders cpo = new CustomerPreviousOrders(customer);
         this.dispose();
         cpo.setVisible(true);
     }//GEN-LAST:event_cmdViewOrdersActionPerformed
