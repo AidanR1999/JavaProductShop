@@ -553,7 +553,7 @@ public class DBManager
         } 
         catch (Exception e) 
         {
-             System.out.println("Error editiing orderline in database");
+             System.out.println("Error editing orderline in database");
         }
     }
     
@@ -576,7 +576,7 @@ public class DBManager
         }
         catch (Exception e)
         {
-            
+            System.out.println("Error editing stock level in database");
         }
     }
 }
