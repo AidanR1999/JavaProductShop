@@ -162,14 +162,18 @@ public class ViewBasket extends javax.swing.JFrame {
     }//GEN-LAST:event_cmdBackActionPerformed
 
     private void cmdPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdPurchaseActionPerformed
-        order.setStatus("Complete");
-        
-        DBManager db = new DBManager();
-        db.completeOrder(order.getOrderId());
-        
-        Confirmation confirmation = new Confirmation(customer);
-        this.dispose();
-        confirmation.setVisible(true);
+        if(tblProducts.contains(0,0))
+        {
+            order.setStatus("Complete");
+
+            DBManager db = new DBManager();
+            db.completeOrder(order.getOrderId());
+            order.updateStockLevel();
+
+            Confirmation confirmation = new Confirmation(customer);
+            this.dispose();
+            confirmation.setVisible(true);
+        }
     }//GEN-LAST:event_cmdPurchaseActionPerformed
 
     private void cmdRemoveProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdRemoveProductActionPerformed

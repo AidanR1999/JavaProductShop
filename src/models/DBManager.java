@@ -556,4 +556,27 @@ public class DBManager
              System.out.println("Error editiing orderline in database");
         }
     }
+    
+    public void editStockLevel(Product product, OrderLine orderLine)
+    {
+        int quantity = orderLine.getQuantity();
+        int stock = product.getStockLevel() - quantity;
+        
+        try 
+        {
+            Class.forName(driver);
+            Connection conn = DriverManager.getConnection(connectionString);
+            Statement sql = conn.createStatement();
+            
+            sql.executeUpdate("UPDATE Products "
+                            + "SET StockLevel = '" + stock + "' "
+                            + "WHERE ProductId = '" + product.getProductID() + "'");
+            
+            conn.close();
+        }
+        catch (Exception e)
+        {
+            
+        }
+    }
 }

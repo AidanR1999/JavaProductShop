@@ -152,7 +152,15 @@ public class Order {
     //UPDATE STOCK LEVEL
     public void updateStockLevel()
     {
-        
+        for(Map.Entry<Integer, OrderLine> olEntry : orderLines.entrySet())
+        {
+            OrderLine orderLine = olEntry.getValue();
+            Product product = orderLine.getProduct();
+            
+            DBManager db = new DBManager();
+            
+            db.editStockLevel(product, orderLine);
+        }
     }
     
     //CHECK IF PRODUCT IS IN BASKET
