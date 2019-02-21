@@ -49,6 +49,11 @@ public class StaffHome extends javax.swing.JFrame {
         });
 
         cmdViewAllOrders.setText("View all orders");
+        cmdViewAllOrders.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdViewAllOrdersActionPerformed(evt);
+            }
+        });
 
         cmdLogout.setText("Log out");
         cmdLogout.addActionListener(new java.awt.event.ActionListener() {
@@ -107,6 +112,12 @@ public class StaffHome extends javax.swing.JFrame {
         this.dispose();
         vps.setVisible(true);
     }//GEN-LAST:event_cmdModifyProductsActionPerformed
+
+    private void cmdViewAllOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdViewAllOrdersActionPerformed
+        StaffViewAllOrders svao = new StaffViewAllOrders(staff);
+        this.dispose();
+        svao.setVisible(true);
+    }//GEN-LAST:event_cmdViewAllOrdersActionPerformed
 
     /**
      * @param args the command line arguments

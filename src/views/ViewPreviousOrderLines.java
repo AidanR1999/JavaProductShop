@@ -5,7 +5,6 @@
  */
 package views;
 
-import java.text.SimpleDateFormat;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import models.Customer;
@@ -149,7 +148,9 @@ public class ViewPreviousOrderLines extends javax.swing.JFrame {
         }
         else
         {
-            StaffViewOrders avo = new StaffViewOrders((Staff) user);
+            StaffViewAllOrders svao = new StaffViewAllOrders((Staff) user);
+            this.dispose();
+            svao.setVisible(true);
         }
     }//GEN-LAST:event_cmdBackActionPerformed
 
