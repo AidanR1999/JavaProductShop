@@ -15,11 +15,11 @@ public class OrderLine {
         this.quantity = 1;
         this.lineTotal = product.getPrice();
     }
-    public OrderLine(int orderLineId, Product product, int quantity, double lineTotal) {
+    public OrderLine(int orderLineId, Product product, int quantity) {
         this.orderLineId = orderLineId;
         this.product = product;
         this.quantity = quantity;
-        this.lineTotal = lineTotal;
+        this.lineTotal = product.getPrice() * quantity;
     }
     
     //GETTERS AND SETTERS

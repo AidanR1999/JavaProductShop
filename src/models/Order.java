@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 
 public class Order {
     
@@ -148,5 +149,29 @@ public class Order {
                 calculateOrderTotal();
             }
         }
+    }
+   
+    //UPDATE STOCK LEVEL
+    public void updateStockLevel()
+    {
+        
+    }
+    
+    //CHECK IF PRODUCT IS IN BASKET
+    public Optional<OrderLine> checkIfProductIsInBasket(int productId)
+    {
+        Optional<OrderLine> orderLineIn = Optional.empty();
+        
+        for(Map.Entry<Integer, OrderLine> olEntry : orderLines.entrySet()) 
+        {
+            OrderLine orderLine = olEntry.getValue();
+            Product product = orderLine.getProduct();
+
+            if(product.getProductID()== productId) 
+            {
+                orderLineIn = Optional.of(orderLine);
+            }
+        }
+        return orderLineIn;
     }
 }

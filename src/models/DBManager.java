@@ -446,6 +446,7 @@ public class DBManager
             sql.executeUpdate
                     ("DELETE FROM OrderLines "
                     + "WHERE OrderLineId = '" + orderLineId + "'");
+            conn.close();
             
         } 
         catch (Exception e) 
@@ -507,7 +508,6 @@ public class DBManager
                 int orderLineId = rs.getInt("OrderLineId");
                 int productId = rs.getInt("ProductId");
                 int quantity = rs.getInt("Quantity");
-                double lineTotal = rs.getDouble("LineTotal");
                 int orderId = rs.getInt("OrderId");
                 
                 for(Map.Entry<String, Customer> cEntry : customers.entrySet())
@@ -518,7 +518,7 @@ public class DBManager
                         Order orderForOrderLine = customer.getOrders().get(orderId);
                         
                         Product product = loadProducts().get(productId);
-                        OrderLine orderLine = new OrderLine(orderLineId, product, quantity, lineTotal);
+                        OrderLine orderLine = new OrderLine(orderLineId, product, quantity);
                         
                         orderForOrderLine.getOrderLines().put(orderLineId, orderLine);
                     }
@@ -532,6 +532,28 @@ public class DBManager
         finally
         {
             return customers;
+        }
+    }
+    
+    public void editOrderLine(OrderLine orderLine)
+    {
+        try 
+        {
+            Class.forName(driver);
+            Connection conn = DriverManager.getConnection(connectionString);
+            Statement sql = conn.createStatement();
+            
+            sql.executeUpdate(
+                    "UPDATE OrderLines "
+                    + "SET Quantity = '" + orderLine.getQuantity() + "',"
+                    + " LineTotal = '" + orderLine.getLineTotal() + "'"
+                    + " WHERE OrderLineId = '" + orderLine.getOrderLineId() + "'"
+            );
+            conn.close();
+        } 
+        catch (Exception e) 
+        {
+             System.out.println("Error editiing orderline in database");
         }
     }
 }

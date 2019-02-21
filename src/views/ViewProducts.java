@@ -7,6 +7,7 @@ package views;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import javax.swing.DefaultListModel;
 import models.Customer;
 import models.DBManager;
@@ -227,12 +228,46 @@ public class ViewProducts extends javax.swing.JFrame {
             Product product = (Product) productObject;
             
             int quantity = Integer.parseInt(String.valueOf(cmbQuantity.getSelectedItem()));
+            Optional<OrderLine> optionalOrderline = currentOrder.checkIfProductIsInBasket(product.getProductID());
             
-            OrderLine ol = new OrderLine(currentOrder, product);
-            currentOrder.addOrderLine(ol);
-            
-            lblErrorMessage.setText("Product added to basket!");
-            cmbQuantity.setSelectedIndex(0);
+            if(!optionalOrderline.isPresent())
+            {
+                if(product.getStockLevel() >= quantity)
+                {
+                    OrderLine orderLine = new OrderLine(currentOrder.generateUniqueOrderLineId(), product, quantity);
+                    currentOrder.addOrderLine(orderLine);
+                    
+                    cmbQuantity.setSelectedIndex(0);
+                    
+                    lblErrorMessage.setText("Product added to basket!");
+                }
+                else
+                {
+                    lblErrorMessage.setText("Error: Product not in stock");
+                } 
+            }
+            else
+            {
+                OrderLine orderLine = optionalOrderline.get();
+                
+                if(product.getStockLevel() - quantity >= orderLine.getQuantity())
+                {
+                    orderLine.setQuantity(orderLine.getQuantity() + quantity);
+                    orderLine.setLineTotal(orderLine.getLineTotal() + product.getPrice() * quantity);
+                    
+                    DBManager db = new DBManager();
+                    
+                    db.editOrderLine(orderLine);
+                    
+                    currentOrder.calculateOrderTotal();
+                    cmbQuantity.setSelectedIndex(0);
+                    lblErrorMessage.setText("Product added to basket!");
+                }
+                else
+                {
+                    lblErrorMessage.setText("Error: Product not in stock");
+                }
+            }
         }
         else
         {
