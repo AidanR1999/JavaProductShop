@@ -30,6 +30,7 @@ public class StaffViewAllOrders extends javax.swing.JFrame {
     public StaffViewAllOrders(Staff s) {
         staff = s;
         initComponents();
+        this.setLocationRelativeTo(null);
         
         DBManager db = new DBManager();
         customers = db.loadCustomers();

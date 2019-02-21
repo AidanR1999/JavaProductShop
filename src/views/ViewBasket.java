@@ -29,6 +29,7 @@ public class ViewBasket extends javax.swing.JFrame {
         order = c.findLatestOrder();
         
         initComponents();
+        this.setLocationRelativeTo(null);
         
         DefaultTableModel basket = (DefaultTableModel) tblProducts.getModel();
         

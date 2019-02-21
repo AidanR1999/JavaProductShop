@@ -35,6 +35,7 @@ public class ViewProducts extends javax.swing.JFrame {
         products = db.loadProducts();
         
         initComponents();
+        this.setLocationRelativeTo(null);
         
         if(!customer.isIsRegistered())
         {

@@ -27,6 +27,7 @@ public class AddProduct extends javax.swing.JFrame {
     public AddProduct(Staff s) {
         this.staff = s;
         initComponents();
+        this.setLocationRelativeTo(null);
         
         bg = new ButtonGroup();
         bg.add(rdoClothing);

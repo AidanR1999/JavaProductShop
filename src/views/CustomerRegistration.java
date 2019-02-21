@@ -20,6 +20,7 @@ public class CustomerRegistration extends javax.swing.JFrame {
      */
     public CustomerRegistration() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

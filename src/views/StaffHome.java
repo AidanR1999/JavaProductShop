@@ -22,6 +22,7 @@ public class StaffHome extends javax.swing.JFrame {
     public StaffHome(Staff s) {
         this.staff = s;
         initComponents();
+        this.setLocationRelativeTo(null);
         lblWelcome.setText(s.displayGreeting());
     }
 

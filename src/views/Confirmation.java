@@ -22,6 +22,7 @@ public class Confirmation extends javax.swing.JFrame {
     public Confirmation(Customer c) {
         customer = c;
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

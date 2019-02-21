@@ -31,6 +31,7 @@ public class ModifyProducts extends javax.swing.JFrame {
         products = db.loadProducts();
         
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

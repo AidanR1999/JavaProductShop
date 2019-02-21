@@ -22,6 +22,7 @@ public class CustomerHome extends javax.swing.JFrame {
     public CustomerHome(Customer c) {
         this.customer = c;
         initComponents();
+        this.setLocationRelativeTo(null);
         lblWelcome.setText(c.displayGreeting());
     }
 

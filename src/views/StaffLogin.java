@@ -19,6 +19,7 @@ public class StaffLogin extends javax.swing.JFrame {
      */
     public StaffLogin() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

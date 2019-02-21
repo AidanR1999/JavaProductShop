@@ -19,6 +19,7 @@ public class CustomerLogin extends javax.swing.JFrame {
      */
     public CustomerLogin() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

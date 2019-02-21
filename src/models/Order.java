@@ -105,8 +105,6 @@ public class Order {
     //ADD ORDER LINE
     public void addOrderLine(OrderLine ol)
     {
-        int oldOrderLineId = ol.getOrderLineId();
-        
         DBManager db = new DBManager();
         int orderLineId = db.addOrderLine(ol, orderId);
         

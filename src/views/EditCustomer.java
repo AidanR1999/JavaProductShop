@@ -25,6 +25,7 @@ public class EditCustomer extends javax.swing.JFrame {
         
         initComponents();
         insertCustomerInfo();
+        this.setLocationRelativeTo(null);
     }
     
     public void insertCustomerInfo(){

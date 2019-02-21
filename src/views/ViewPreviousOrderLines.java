@@ -34,6 +34,7 @@ public class ViewPreviousOrderLines extends javax.swing.JFrame {
         this.orderId = orderId;
         
         initComponents();
+        this.setLocationRelativeTo(null);
         
         DefaultTableModel orderLines = (DefaultTableModel) tblOrderLines.getModel();
         

@@ -26,6 +26,7 @@ public class CustomerPreviousOrders extends javax.swing.JFrame {
     public CustomerPreviousOrders(Customer c) {
         customer = c;
         initComponents();
+        this.setLocationRelativeTo(null);
         
         DefaultTableModel orders = (DefaultTableModel) tblOrders.getModel();
         

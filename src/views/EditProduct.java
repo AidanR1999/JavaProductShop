@@ -30,6 +30,7 @@ public class EditProduct extends javax.swing.JFrame {
         this.product = p;
         
         initComponents();
+        this.setLocationRelativeTo(null);
         
         txtId.setText(String.valueOf(p.getProductID()));
         txtId.setEnabled(false);
