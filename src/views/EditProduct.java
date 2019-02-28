@@ -18,26 +18,31 @@ import models.Staff;
  */
 public class EditProduct extends javax.swing.JFrame {
 
-    
+    //logged in staff
     private static Staff staff;
+    
+    //product loaded in
     private static Product product;
     
     /**
      * Creates new form EditProduct
      */
     public EditProduct(Staff s, Product p) {
+        //load values
         this.staff = s;
         this.product = p;
         
         initComponents();
         this.setLocationRelativeTo(null);
         
+        //set text boxes to product infor
         txtId.setText(String.valueOf(p.getProductID()));
         txtId.setEnabled(false);
         txtName.setText(p.getProductName());
         txtPrice.setText(String.valueOf(p.getPrice()));
         txtStockLevel.setText(String.valueOf(p.getStockLevel()));
         
+        //if product is clothing, load additonal property for clothing
         if(product.getClass().getName().equals("models.Clothing"))
         {
             lblMeasureSize.setText("Measurement:");
@@ -45,6 +50,7 @@ public class EditProduct extends javax.swing.JFrame {
             txtMeasureSize.setText(c.getMeasurement());
             
         }
+        //product is footwear, load additional property for footwear
         else
         {
             lblMeasureSize.setText("Shoe Size:");
@@ -190,41 +196,53 @@ public class EditProduct extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //return to modify products page
     private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
         ModifyProducts vps = new ModifyProducts(staff);
         this.dispose();
         vps.setVisible(true);
     }//GEN-LAST:event_cmdBackActionPerformed
 
+    //update product info
     private void cmdSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdSubmitActionPerformed
+        //get user input
         String name = txtName.getText();
         String price = txtPrice.getText();
         String stockLevel = txtStockLevel.getText();
         String MeasureSize = txtMeasureSize.getText();
         
+        //create instance of database
         DBManager db = new DBManager();
         
+        //if any text box is blank, show error
         if(name.equals("") || price.equals("") || stockLevel.equals("") || MeasureSize.equals(""))
             lblErrorMessage.setText("Error: Please fill out all data");
+        //all text boxes have data
         else
         {
             try 
             {
+                //store price as double
                 double doublePrice = Double.parseDouble(price);
                 
                 try 
                 {
+                    //store stock level as integer
                     int intStockLevel = Integer.parseInt(stockLevel);
                     
+                    //if product is footwear
                     if(product.getClass().getName().equals("models.Footwear"))
                     {
                         try 
                         {
+                            //store size as integer
                             int intSize = Integer.parseInt(MeasureSize);
                             
+                            //update product in the database
                             Footwear f = new Footwear(intSize, product.getProductID(), name, doublePrice, intStockLevel);
                             db.editProduct(f);
 
+                            //load modify products page
                             ModifyProducts mp = new ModifyProducts(staff);
                             this.dispose();
                             mp.setVisible(true);
@@ -234,11 +252,14 @@ public class EditProduct extends javax.swing.JFrame {
                             lblErrorMessage.setText("Error: Please enter number for size");
                         }
                     }
+                    //product is clothing
                     else
                     {
+                        //update product in the database
                         Clothing c = new Clothing(MeasureSize, product.getProductID(), name, doublePrice, intStockLevel);
                         db.editProduct(c);
                         
+                        //load modify products page
                         ModifyProducts mp = new ModifyProducts(staff);
                         this.dispose();
                         mp.setVisible(true);
