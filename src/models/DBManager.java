@@ -11,25 +11,36 @@ import java.util.Map;
 
 public class DBManager
 {
+    //store the driver for reading from the databaseS
     private final String driver = "net.ucanaccess.jdbc.UcanaccessDriver";
-    //net.ucanaccess.jdbc.UcanaccessDriver
+    
+    //store the hardcoded connection string of the database location
     private final String connectionString = "jdbc:ucanaccess://D:\\Java Projects\\Shop_30247197\\data\\ShopDB.accdb";
     
+    //LOAD CUSTOMERS FROM THE DATABASE
     public HashMap<String, Customer> loadCustomers()
     {
-        
+        //instantiate an empty hashmap of customers
         HashMap<String, Customer> customers = new HashMap();
         
         try 
         {
+            //establish the driver
             Class.forName(driver);
+            
+            //establish the connection
             Connection conn = DriverManager.getConnection(connectionString);
             
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("Select * from Customers");
+            //instantiate the sql statement
+            Statement sql = conn.createStatement();
             
+            //execute select statement query and store the results
+            ResultSet rs = sql.executeQuery("Select * from Customers");
+            
+            //while there are rows left to loop through
             while(rs.next())
             {
+                //store all the values from the current row of the result set
                 String Username = rs.getString("Username");
                 String Password = rs.getString("Password");
                 String Forename = rs.getString("FirstName");
@@ -39,38 +50,60 @@ public class DBManager
                 String Town = rs.getString("Town");
                 String Postcode = rs.getString("Postcode");
                 
+                //create a new customer using the values
                 Customer customer = new Customer(AddressLine1, AddressLine2, Town, Postcode, true, Username, Password, Forename, Surname);
+                
+                //add the customer to the hashmap
                 customers.put(Username, customer);
             }
+            
+            //close the connection
             conn.close();
             
-        } 
+        }
+        //if exception is thrown
         catch (Exception e) 
         {
-            String message = e.getMessage();
+            //print error to console
+            System.out.println("Error loading customers from database");
         }
         finally
         {
+            //load customer orders into the hashmap
             customers = loadCustomerOrders(customers);
+            
+            //load customer orderlines into the hashmap
             customers = loadCustomerOrderLines(customers);
+            
+            //return hashmap of customers
             return customers;
         }
     }
+    
+    //LOAD STAFF FROM DATABASE
     public HashMap<String, Staff> loadStaff()
     {
-        
+        //instantiate an empty hashmap of staff
         HashMap<String, Staff> staff = new HashMap();
         
         try 
         {
+            //establish the driver
             Class.forName(driver);
+            
+            //establish the connection
             Connection conn = DriverManager.getConnection(connectionString);
             
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("Select * from Staff");
+            //instantiate the sql statement
+            Statement sql = conn.createStatement();
             
+            //execute select statement query and store the results
+            ResultSet rs = sql.executeQuery("Select * from Staff");
+            
+            //while there are rows left to loop through
             while(rs.next())
             {
+                //store all the values from the current row of the result set
                 String Username = rs.getString("Username");
                 String Password = rs.getString("Password");
                 String Forename = rs.getString("FirstName");
@@ -78,37 +111,54 @@ public class DBManager
                 String Position = rs.getString("Position");
                 double Salary = rs.getDouble("Salary");
                 
+                //create a new staff member using the values
                 Staff staffMember = new Staff(Position, Salary, Username, Password, Forename, Surname);
+                
+                //add the staff member to the hashmap
                 staff.put(Username, staffMember);
             }
+            
+            //close the connection
             conn.close();
             
         } 
+        //if exception is thrown
         catch (Exception e) 
         {
-            String message = e.getMessage();
+            //print error to console
+            System.out.println("Error loading staff from database");
         }
         finally
         {
+            //return hashmap of staff
             return staff;
         }
     }
     
+    //LOAD PRODUCTS FROM THE DATABASE
     public HashMap<Integer, Product> loadProducts()
     {
-        
+        //instantiate an empty hashmap of products
         HashMap<Integer, Product> products = new HashMap();
         
         try 
         {
+            //establish the driver
             Class.forName(driver);
+            
+            //establish the connection
             Connection conn = DriverManager.getConnection(connectionString);
             
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("Select * from Products");
+            //instantiate the sql statement
+            Statement sql = conn.createStatement();
             
+            //execute select statement query and store the results
+            ResultSet rs = sql.executeQuery("Select * from Products");
+            
+            //while there are rows left to loop through
             while(rs.next())
             {
+                //store all the values from the current row of the result set
                 int ProductId = rs.getInt("ProductId");
                 String Name = rs.getString("ProductName");
                 double Price = rs.getDouble("Price");
@@ -116,53 +166,80 @@ public class DBManager
                 String Measurement = rs.getString("Measurement");
                 int Size = rs.getInt("Size");
                 
+                //if size isnt 0, then product must be footwear
                 if(Size != 0)
                 {
+                    //create footwear using the values
                     Footwear footwear = new Footwear(Size, ProductId, Name, Price, StockLevel);
+                    
+                    //add footwear to products hashmap
                     products.put(ProductId, footwear);
                 }
+                //else product must be clothing
                 else
                 {
+                    //create clothing using the values
                     Clothing clothing = new Clothing(Measurement, ProductId, Name, Price, StockLevel);
+                    
+                    //add clothing to products hashmap
                     products.put(ProductId, clothing);
                 }
             }
-            conn.close();
             
+            //close the connection
+            conn.close();
         } 
+        //if exception is thrown
         catch (Exception e) 
         {
-            String message = e.getMessage();
+            //print error to console
+            System.out.println("Error loading products from database");
         }
         finally
         {
+            //return hashmap of products
             return products;
         }
     }
     
+    //EDIT PRODUCT IN THE DATABASE
     public void editProduct(Product p)
     {
+        //instantiate the differentiators for products 
         String Measurement = "NULL";
         int Size = 0;
         
+        //if the product is clothing
         if(p.getClass().getName().equals("models.Clothing"))
         {
+            //cast product as clothing
             Clothing c = (Clothing) p;
+            
+            //store the measurement
             Measurement = String.valueOf(c.getMeasurement());
         }
+        //else product is footwear
         else
         {
+            //cast product as footwear
             Footwear f = (Footwear) p;
+            
+            //store the size
             Size = f.getSize();
         }
         
         try 
         {
+            //establish the driver
             Class.forName(driver);
+            
+            //establish the connection
             Connection conn = DriverManager.getConnection(connectionString);
             
+            //instantiate the sql statement
             Statement sql = conn.createStatement();
             
+            //execute update statement in the database where the product Id's match
             sql.executeUpdate("UPDATE Products "
                     + "SET ProductName = '" + p.getProductName() + "'"
                     + ", Price = '" + p.getPrice() + "'"
@@ -171,53 +248,80 @@ public class DBManager
                     + ", Size = " + Size
                     + " WHERE ProductID = '" + p.getProductID() + "'");
             
+            //close the connection
             conn.close();
         } 
+        //if exception is thrown
         catch (Exception e) 
         {
-            System.out.println("Error writing to the database");
+            //print error to console
+            System.out.println("Error editing product in the database");
         }
     }
     
+    //REMOVE PRODUCT FROM DATABASE
     public void deleteProduct(Product p)
     {
         try 
         {
+            //establish the driver
             Class.forName(driver);
+            
+            //establish the connection
             Connection conn = DriverManager.getConnection(connectionString);
+            
+            //instantiate the sql statement
             Statement sql = conn.createStatement();
             
+            //execute delete statement in the database where the product Id's match
             sql.executeUpdate("DELETE FROM Products WHERE ProductId = '" + p.getProductID() + "'");
         } 
+        //if exception is thrown
         catch (Exception e) 
         {
+            //print error to console
             System.out.println("Error deleting product from database");
         }
     }
     
+    //ADD PRODUCT TO THE DATABASE
     public void addProduct(Product p)
     {
+        //instantiate the differentiators for products 
         String Measurement = "NULL";
         int Size = 0;
         
+        //if the product is clothing
         if(p.getClass().getName().equals("models.Clothing"))
         {
+            //cast product as clothing
             Clothing c = (Clothing) p;
+            
+            //store the measurement
             Measurement = String.valueOf(c.getMeasurement());
         }
+        //else product is footwear
         else
         {
+            //cast product as footwear
             Footwear f = (Footwear) p;
+            
+            //store the size
             Size = f.getSize();
         }
         
         try 
         {
+            //establish the driver
             Class.forName(driver);
+            
+            //establish the connection
             Connection conn = DriverManager.getConnection(connectionString);
             
+            //instantiate the sql statement
             Statement sql = conn.createStatement();
             
+            //execute insert statement to add product into products table
             sql.executeUpdate("INSERT INTO Products (ProductName, Price, StockLevel, Measurement, Size) "
                 + "VALUES ('" + p.getProductName() + "' , '"
                 + p.getPrice()  + "' , '" 
@@ -226,11 +330,14 @@ public class DBManager
                 + Size + ")");
             
             
+            //close the connection
             conn.close();
         } 
+        //if exception is thrown
         catch (Exception e) 
         {
-            System.out.println("Error writing to the database");
+            //print error to console
+            System.out.println("Error adding product to the database");
         }
     }
     

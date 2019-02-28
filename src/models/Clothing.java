@@ -20,7 +20,6 @@ public class Clothing extends Product{
     public String getMeasurement() {
         return measurement;
     }
-
     public void setMeasurement(String measurement) {
         this.measurement = measurement;
     }

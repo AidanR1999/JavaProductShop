@@ -88,53 +88,83 @@ public class Customer extends User{
         return String.format("Welcome %s %s, Enjoy Shopping!", getForename(), getSurname());
     }
     
+    //ADD ORDER TO DATABASE
     public void addOrder(Order o)
     {
+        //new instance of database
         DBManager db = new DBManager();
+        //add order to database and get orderId
         int orderId = db.addOrder(o, this.getUsername());
         
+        //put order in HashMap
         orders.put(orderId, o);
         orders.get(orderId).setOrderId(orderId);
     }
     
+    //GENERTATE UNIQUE ORDER ID FOR ADDING ORDERS
     public int generateUniqueOrderId()
     {
+        //initialise order id
         int orderId = 0;
+        
+        //for every order in the hashmap
         for(Map.Entry<Integer, Order> element : orders.entrySet())
         {
+            //if the order id already exists in the hasmap
             if(orders.containsKey(orderId))
             {
+                //increment the order id
                 orderId++;
             }
         }
+        
+        //return the unique order id
         return orderId;
     }
     
+    //FIND LATEST ORDER IN THE DATABASE
     public Order findLatestOrder()
     {
+        //initialise new order
         Order lastOrder = new Order();
+        
+        //if the customers orders are empty
         if(orders.isEmpty())
         {
+            //add an empty order to the hashmap
             addOrder(lastOrder);
         }
         else
         {
+            //store the last order in the orders hashmap
             lastOrder = orders.entrySet().iterator().next().getValue();
+            
+            //for every order in the orders hashmap
             for(Map.Entry<Integer, Order> o : orders.entrySet())
             {
+                //store the current order in the loop
                 Order actualOrder = o.getValue();
+                
+                //if the date of the current order is newer than the date of the last order
                 if(actualOrder.getOrderDate().after(lastOrder.getOrderDate()))
                 {
+                    //set the last order as the current order
                     lastOrder = actualOrder;
                 }
             }
             
+            //if the latest order is complete
             if(lastOrder.getStatus().equals("Complete"))
             {
+                //create a new order
                 lastOrder = new Order();
+                
+                //add the order to the database
                 addOrder(lastOrder);
             }
         }
+        
+        //return the latest order
         return lastOrder;
     }
 }

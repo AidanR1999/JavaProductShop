@@ -90,60 +90,90 @@ public class Order {
     //GENERATE UNIQUE ORDER LINE ID
     public int generateUniqueOrderLineId()
     {
+        //initialise orderline id
         int orderLineId = 0;
         
+        //for every orderline in the orderlines hashmap
         for(Map.Entry<Integer, OrderLine> element : orderLines.entrySet())
         {
+            //if orderline id already exists in hashmap
             if(orderLines.containsKey(orderLineId))
             {
+                //increment orderline id
                 orderLineId++;
             }
         }
+        
+        //return orderline id
         return orderLineId;
     }
     
-    //ADD ORDER LINE
+    //ADD ORDER LINE TO DATABASE
     public void addOrderLine(OrderLine ol)
     {
+        //create new instance of database
         DBManager db = new DBManager();
+        
+        //add orderline to database and store order line id
         int orderLineId = db.addOrderLine(ol, orderId);
         
+        //add orderline to the hashmao
         orderLines.put(orderLineId, ol);
         orderLines.get(orderLineId).setOrderLineId(orderLineId);
         
+        //get the total of the whole order
         calculateOrderTotal();
     }
     
     //CALCULATE ORDER TOTAL
     public void calculateOrderTotal()
     {
+        //initailise order total
         orderTotal = 0;
         
+        //for every orderline in the hashmap
         for(Map.Entry<Integer, OrderLine> element : orderLines.entrySet())
         {
+            //get the current orderline in the loop
             OrderLine ol = element.getValue();
+            
+            //add the line total to the order total
             orderTotal = orderTotal + ol.getLineTotal();
         }
         
+        //create instance of database
         DBManager db = new DBManager();
+        
+        //update ordertotal in the database
         db.updateOrderTotal(orderId, orderTotal);
     }
     
     //REMOVE ORDERLINE
     public void removeOrderLine(int productId)
     {
+        //store the indices of the orderlines
         Iterator<Map.Entry<Integer, OrderLine>> iter = orderLines.entrySet().iterator();
+        
+        //while the iterator has an index after its current index
         while(iter.hasNext())
         {
+            //get the orderline at the current iteration
             OrderLine actualOrderLine = iter.next().getValue();
+            
+            //if the productId of the current orderline = the productId of the product requested to be removed
             if(actualOrderLine.getProduct().getProductID() == productId)
             {
+                //get the orderline id 
                 int orderLineId = actualOrderLine.getOrderLineId();
+                //create instance of database
                 DBManager db = new DBManager();
+                //delete orderline from database
                 db.deleteOrderLine(orderLineId);
                 
+                //remove the orderline from the iterator
                 iter.remove();
                 
+                //calculate the new order total
                 calculateOrderTotal();
             }
         }
@@ -152,13 +182,19 @@ public class Order {
     //UPDATE STOCK LEVEL
     public void updateStockLevel()
     {
+        //for every orderline in the hashmap
         for(Map.Entry<Integer, OrderLine> olEntry : orderLines.entrySet())
         {
+            //get the current orderline in the loop
             OrderLine orderLine = olEntry.getValue();
+            
+            //get the product in the orderline
             Product product = orderLine.getProduct();
             
+            //create intsance of database
             DBManager db = new DBManager();
             
+            //update the stock level in the database
             db.editStockLevel(product, orderLine);
         }
     }
@@ -166,18 +202,27 @@ public class Order {
     //CHECK IF PRODUCT IS IN BASKET
     public Optional<OrderLine> checkIfProductIsInBasket(int productId)
     {
+        //get a nullable orderline
         Optional<OrderLine> orderLineIn = Optional.empty();
         
+        //for every orderline in the hashmap
         for(Map.Entry<Integer, OrderLine> olEntry : orderLines.entrySet()) 
         {
+            //get the current orderline in the loop
             OrderLine orderLine = olEntry.getValue();
+            
+            //get the product in the orderline
             Product product = orderLine.getProduct();
 
+            //if the product id of the product = the product id of the product requested
             if(product.getProductID()== productId) 
             {
+                //set the orderline to the current orderline in the loop
                 orderLineIn = Optional.of(orderLine);
             }
         }
+        
+        //return nullable orderline
         return orderLineIn;
     }
 }

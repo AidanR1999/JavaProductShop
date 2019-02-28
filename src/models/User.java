@@ -2,21 +2,19 @@ package models;
 
 public class User {
 
-    //Attributes
+    //ATTRIBUTES
     private String username;
     private String password;
     private String forename;
     private String surname;
  
-    //Constructors
-    //empty
+    //CONSTRUCTORS
     public User(){
         this.username = "null";
         this.password = "null";
         this.forename = "null";
         this.surname = "null";
     }
-    //all attributes
     public User(String username, String password, String forename, String surname) {
         this.username = username;
         this.password = password;
@@ -24,7 +22,8 @@ public class User {
         this.surname = surname;
     }
     
-    //Getters and Setters
+    //GETTERS AND SETTERS
+    //USERNAME
     public String getUsername() {
         return username;
     }
@@ -32,6 +31,7 @@ public class User {
         this.username = username;
     }
 
+    //PASSWORD
     public String getPassword() {
         return password;
     }
@@ -39,6 +39,7 @@ public class User {
         this.password = password;
     }
 
+    //FORENAME
     public String getForename() {
         return forename;
     }
@@ -46,6 +47,7 @@ public class User {
         this.forename = forename;
     }
 
+    //SURNAME
     public String getSurname() {
         return surname;
     }
