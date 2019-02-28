@@ -18,7 +18,10 @@ import models.Staff;
  */
 public class ModifyProducts extends javax.swing.JFrame {
 
+    //logged in staff
     private static Staff staff;
+    
+    //all products
     private HashMap<Integer, Product> products;
     
     /**
@@ -27,6 +30,7 @@ public class ModifyProducts extends javax.swing.JFrame {
     public ModifyProducts(Staff s) {
         this.staff = s;
         
+        //load all products from database
         DBManager db = new DBManager();
         products = db.loadProducts();
         
@@ -166,56 +170,76 @@ public class ModifyProducts extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //return to staff home page
     private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
         StaffHome sm = new StaffHome(staff);
         this.dispose();
         sm.setVisible(true);
     }//GEN-LAST:event_cmdBackActionPerformed
 
+    //user selects product type
     private void lstProductTypesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstProductTypesValueChanged
+        //get product type
         String typeSelected = lstProductTypes.getSelectedValue();
         
+        //set table model
         DefaultListModel productList = new DefaultListModel();
         
+        //for every product in the hashmap
         for(Map.Entry<Integer, Product> productEntry : products.entrySet())
         {
+            //get product from current iteration
             Product product = productEntry.getValue();
             
+            //if product types match
             if(product.getClass().getName().equals("models." + typeSelected))
             {
+                //add product to table
                 productList.addElement(product);
             }
         }
+        
+        //display table
         lstProducts.setModel(productList);
     }//GEN-LAST:event_lstProductTypesValueChanged
 
+    //load add product page
     private void cmdAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAddProductActionPerformed
         AddProduct ap = new AddProduct(staff);
         this.dispose();
         ap.setVisible(true);
     }//GEN-LAST:event_cmdAddProductActionPerformed
 
+    //load edit product page
     private void cmdEditProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdEditProductActionPerformed
+        //if user has selected a product
         if(lstProducts.getSelectedIndex() != -1)
         {
+            //store product selected
             Object selectedObject = (Object)lstProducts.getSelectedValue();
             Product product = (Product) selectedObject;
             
+            //load edit product page
             EditProduct ep = new EditProduct(staff, product);
             this.dispose();
             ep.setVisible(true);
         }
     }//GEN-LAST:event_cmdEditProductActionPerformed
 
+    //delete product from database
     private void cmdDeleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdDeleteProductActionPerformed
+        //if user has selected a product
         if(lstProducts.getSelectedIndex() != -1)
         {
+            //get selected product
             Object productObject = (Object) lstProducts.getSelectedValue();
             Product product = (Product) productObject;
             
+            //delete product from database
             DBManager db = new DBManager();
             db.deleteProduct(product);
             
+            //reload modify products page
             ModifyProducts mp = new ModifyProducts(staff);
             this.dispose();
             mp.setVisible(true);

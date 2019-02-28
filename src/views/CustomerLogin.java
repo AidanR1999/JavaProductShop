@@ -153,33 +153,42 @@ public class CustomerLogin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPasswordActionPerformed
 
+    //return to main menu page
     private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
         MainMenu mm = new MainMenu();
         this.dispose();
         mm.setVisible(true);
     }//GEN-LAST:event_cmdBackActionPerformed
 
+    //load the cutomer registration page
     private void cmdRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdRegisterActionPerformed
         CustomerRegistration cr = new CustomerRegistration();
         this.dispose();
         cr.setVisible(true);
     }//GEN-LAST:event_cmdRegisterActionPerformed
 
+    //log the user in and display customer home
     private void cmdLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLoginActionPerformed
+        //get user input
         String Username = txtUsername.getText();
         String Password = txtPassword.getText();
         
+        //log the customer in
         DBManager db = new DBManager();
         Customer c = db.customerLogin(Username, Password);
         
+        //if the returned customer is not null
         if(c != null)
         {
+            //load customer home
             CustomerHome ch = new CustomerHome(c);
             this.dispose();
             ch.setVisible(true);
         }
+        //else returned customer is null
         else
         {
+            //show error
             lblErrorMessage.setText("Error: Incorrect username or password");
         }
     }//GEN-LAST:event_cmdLoginActionPerformed

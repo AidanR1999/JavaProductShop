@@ -14,6 +14,7 @@ import models.DBManager;
  */
 public class CustomerHome extends javax.swing.JFrame {
 
+    //logged in customer
     private static Customer customer;
     
     /**
@@ -23,6 +24,8 @@ public class CustomerHome extends javax.swing.JFrame {
         this.customer = c;
         initComponents();
         this.setLocationRelativeTo(null);
+        
+        //show welcome message
         lblWelcome.setText(c.displayGreeting());
     }
 
@@ -128,33 +131,40 @@ public class CustomerHome extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //logout the customer and return to login page
     private void cmdLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLogoutActionPerformed
         CustomerLogin cl = new CustomerLogin();
         this.dispose();
         cl.setVisible(true);
     }//GEN-LAST:event_cmdLogoutActionPerformed
 
+    //load the browse products page
     private void cmdBrowseProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBrowseProductsActionPerformed
         ViewProducts vp = new ViewProducts(customer);
         this.dispose();
         vp.setVisible(true);
     }//GEN-LAST:event_cmdBrowseProductsActionPerformed
 
+    //load the edit customer details page
     private void cmdEditDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdEditDetailsActionPerformed
         EditCustomer ec = new EditCustomer(customer);
         this.dispose();
         ec.setVisible(true);
     }//GEN-LAST:event_cmdEditDetailsActionPerformed
 
+    //unregiser the customer from the database
     private void cmdUnregisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdUnregisterActionPerformed
+        //delete the customer from database
         DBManager db = new DBManager();
         db.deleteCustomer(customer);
         
+        //load main menu page
         MainMenu mm = new MainMenu();
         this.dispose();
         mm.setVisible(true);
     }//GEN-LAST:event_cmdUnregisterActionPerformed
 
+    //load the view orders page
     private void cmdViewOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdViewOrdersActionPerformed
         CustomerPreviousOrders cpo = new CustomerPreviousOrders(customer);
         this.dispose();

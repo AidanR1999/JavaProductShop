@@ -21,8 +21,13 @@ import models.Product;
  */
 public class ViewProducts extends javax.swing.JFrame {
 
+    //logged in customer
     private static Customer customer;
+    
+    //all products
     private HashMap<Integer, Product> products;
+    
+    //current order
     private static Order currentOrder;
     
     /**
@@ -31,20 +36,24 @@ public class ViewProducts extends javax.swing.JFrame {
     public ViewProducts(Customer c) {
         this.customer = c;
         
+        //load products into hashmap
         DBManager db = new DBManager();
         products = db.loadProducts();
         
         initComponents();
         this.setLocationRelativeTo(null);
         
+        //if customer is no registered, disable items related to making a purchase
         if(!customer.isIsRegistered())
         {
             cmdAddToBasket.setEnabled(false);
             cmdViewBasket.setEnabled(false);
             cmbQuantity.setEnabled(false);
         }
+        //customer is logged in
         else
         {
+            //get the last order
             currentOrder = customer.findLatestOrder();
         }
     }
@@ -190,13 +199,16 @@ public class ViewProducts extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //reutrn to previous page
     private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
+        //if customer is not registered go to main menu page
         if(!customer.isIsRegistered())
         {
             MainMenu mm = new MainMenu();
             this.dispose();
             mm.setVisible(true);
         }
+        //if customer is registered go to customer home page
         else
         {
             CustomerHome ch = new CustomerHome(customer);
@@ -205,77 +217,108 @@ public class ViewProducts extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cmdBackActionPerformed
 
+    //when user selects a product type, reload the products
     private void lstProductTypesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstProductTypesValueChanged
+        //get selected product type
         String typeSelected = lstProductTypes.getSelectedValue();
-        
         DefaultListModel productList = new DefaultListModel();
         
+        //for every product in the hashmap
         for(Map.Entry<Integer, Product> productEntry : products.entrySet())
         {
+            //store product in the current iteration
             Product product = productEntry.getValue();
             
+            //if product is of product type
             if(product.getClass().getName().equals("models." + typeSelected))
             {
+                //add product to list
                 productList.addElement(product);
             }
         }
+        
+        //display list
         lstProducts.setModel(productList);
     }//GEN-LAST:event_lstProductTypesValueChanged
 
+    //adds product seletected to the basket
     private void cmdAddToBasketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAddToBasketActionPerformed
+        //if product is selected
         if(lstProducts.getSelectedIndex() != -1)
         {
+            //store product selected
             Object productObject = (Object) lstProducts.getSelectedValue();
             Product product = (Product) productObject;
             
+            //get quantity selected from combo box
             int quantity = Integer.parseInt(String.valueOf(cmbQuantity.getSelectedItem()));
+            
+            //store orderline
             Optional<OrderLine> optionalOrderline = currentOrder.checkIfProductIsInBasket(product.getProductID());
             
+            //if orderline doesnt exists
             if(!optionalOrderline.isPresent())
             {
+                //check if stock level is there is sufficient stock
                 if(product.getStockLevel() >= quantity)
                 {
+                    //create new orderline and add orderline to database
                     OrderLine orderLine = new OrderLine(currentOrder.generateUniqueOrderLineId(), product, quantity);
                     currentOrder.addOrderLine(orderLine);
                     
+                    //reset quantity combo box
                     cmbQuantity.setSelectedIndex(0);
                     
+                    //show message
                     lblErrorMessage.setText("Product added to basket!");
                 }
+                //insufficient stock
                 else
                 {
                     lblErrorMessage.setText("Error: Product not in stock");
                 } 
             }
+            //if orderline exists
             else
             {
+                //store the orderlineS
                 OrderLine orderLine = optionalOrderline.get();
                 
+                //if sufficient stock
                 if(product.getStockLevel() - quantity >= orderLine.getQuantity())
                 {
+                    //update quantity and line total
                     orderLine.setQuantity(orderLine.getQuantity() + quantity);
                     orderLine.setLineTotal(orderLine.getLineTotal() + product.getPrice() * quantity);
                     
+                    //update orderline in database
                     DBManager db = new DBManager();
-                    
                     db.editOrderLine(orderLine);
                     
+                    //update order total
                     currentOrder.calculateOrderTotal();
+                    
+                    //reset combo box
                     cmbQuantity.setSelectedIndex(0);
+                    
+                    //show message
                     lblErrorMessage.setText("Product added to basket!");
                 }
+                //insufficient stock
                 else
                 {
                     lblErrorMessage.setText("Error: Product not in stock");
                 }
             }
         }
+        //product not selected
         else
         {
             lblErrorMessage.setText("Error: Select a product");
         }
     }//GEN-LAST:event_cmdAddToBasketActionPerformed
 
+    //load view basket page
     private void cmdViewBasketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdViewBasketActionPerformed
         ViewBasket vb = new ViewBasket(customer);
         this.dispose();

@@ -17,7 +17,7 @@ import models.Order;
  */
 public class CustomerPreviousOrders extends javax.swing.JFrame {
 
-    
+    //logged in customer
     private static Customer customer;
     
     /**
@@ -28,14 +28,19 @@ public class CustomerPreviousOrders extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         
+        //get model for orders
         DefaultTableModel orders = (DefaultTableModel) tblOrders.getModel();
         
+        //for every order in the hashmap
         for(Map.Entry<Integer, Order> oEntry : customer.getOrders().entrySet())
         {
+            //store order in current iteration
             Order actualOrder = oEntry.getValue();
             
+            //if order is completed
             if(actualOrder.getStatus().equals("Complete"))
             {
+                //add order to table 
                 orders.addRow(new Object[] {
                     actualOrder.getOrderId(),
                     new SimpleDateFormat("dd/MM/yyyy").format(actualOrder.getOrderDate()),
@@ -44,6 +49,7 @@ public class CustomerPreviousOrders extends javax.swing.JFrame {
             }
         }
         
+        //display the table using the model
         tblOrders.setModel(orders);
     }
 
@@ -133,22 +139,29 @@ public class CustomerPreviousOrders extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //return to customer home page
     private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
         CustomerHome ch = new CustomerHome(customer);
         this.dispose();
         ch.setVisible(true);
     }//GEN-LAST:event_cmdBackActionPerformed
 
+    //get seletected order and view orderline
     private void cmdViewOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdViewOrderActionPerformed
+        //if user hasnt selected a order
         if(tblOrders.getSelectedRow() == -1)
         {
+            //show error
             lblError.setText("Error: Please select an order");
         }
+        //user has selected order
         else
         {
+            //get the selceted order
             int rowSelected = tblOrders.getSelectedRow();
             int orderId = Integer.parseInt(String.valueOf(tblOrders.getValueAt(rowSelected, 0)));
             
+            //load the view orderline page
             ViewPreviousOrderLines vpol = new ViewPreviousOrderLines(customer, orderId, customer);
             this.dispose();
             vpol.setVisible(true);

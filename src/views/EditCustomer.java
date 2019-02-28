@@ -16,6 +16,7 @@ import models.DBManager;
  */
 public class EditCustomer extends javax.swing.JFrame {
 
+    //logged in customer
     private static Customer customer;
     /**
      * Creates new form EditCustomer
@@ -24,10 +25,12 @@ public class EditCustomer extends javax.swing.JFrame {
         this.customer = c;
         
         initComponents();
+        //load customer information
         insertCustomerInfo();
         this.setLocationRelativeTo(null);
     }
     
+    //load customer information into text boxes
     public void insertCustomerInfo(){
         txtUsername.setText(customer.getUsername());
         txtPassword.setText(customer.getPassword());
@@ -230,17 +233,21 @@ public class EditCustomer extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //return to customer home page
     private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
         CustomerHome ch = new CustomerHome(customer);
         this.dispose();
         ch.setVisible(true);
     }//GEN-LAST:event_cmdBackActionPerformed
 
+    //revert changes made to data
     private void cmdRevertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdRevertActionPerformed
         insertCustomerInfo();
     }//GEN-LAST:event_cmdRevertActionPerformed
 
+    //update customer details
     private void cmdSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdSubmitActionPerformed
+        //get user input
         String password = txtPassword.getText();
         String forename = txtFirstName.getText();
         String surname = txtLastName.getText();
@@ -249,16 +256,22 @@ public class EditCustomer extends javax.swing.JFrame {
         String town = txtTown.getText();
         String postcode = txtPostcode.getText();
         
+        //if any text boxes are empty
         if(password.equals("") || forename.equals("") || surname.equals("") || addressline1.equals("") || addressline2.equals("") || town.equals("") || postcode.equals(""))
+            //show error
             lblErrorMessage.setText("Error: Please fill out all data");
+        
+        //else user has filled all data
         else
         {
-            //String addressLine1, String addressLine2, String town, String postcode, boolean isRegistered, String username, String password, String forename, String surname
+            //create new customer with data
             Customer c = new Customer(addressline1, addressline2, town, postcode, true, customer.getUsername(), password, forename, surname);
-                
+            
+            //update customer details in the database
             DBManager db = new DBManager();
             db.editCustomer(c);
-                
+             
+            //update logged in customer
             customer = c;
             lblErrorMessage.setText("Details updated");
         }

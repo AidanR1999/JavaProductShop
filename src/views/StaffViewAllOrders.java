@@ -20,8 +20,10 @@ import models.Staff;
  */
 public class StaffViewAllOrders extends javax.swing.JFrame {
 
-    
+    //logged in staff
     private static Staff staff;
+    
+    //all customers in the system
     private HashMap<String, Customer> customers;
     
     /**
@@ -32,19 +34,26 @@ public class StaffViewAllOrders extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         
+        //load customers
         DBManager db = new DBManager();
         customers = db.loadCustomers();
         
+        //set table model
         DefaultTableModel orders = (DefaultTableModel) tblOrders.getModel();
         
+        //for every customer in the hashmap
         for(Map.Entry<String, Customer> cEntry : customers.entrySet())
         {
+            //get customer in current iteration
             Customer customer = cEntry.getValue();
             
+            //for every order in the customers orders
             for(Map.Entry<Integer, Order> oEntry : customer.getOrders().entrySet())
             {
+                //get order from current iteration
                 Order order = oEntry.getValue();
                 
+                //if order is complete, add order to table
                 if(order.getStatus().equals("Complete"))
                 {
                     orders.addRow(new Object[] 
@@ -58,6 +67,7 @@ public class StaffViewAllOrders extends javax.swing.JFrame {
             }
         }
         
+        //display table
         tblOrders.setModel(orders);
     }
 
@@ -154,25 +164,33 @@ public class StaffViewAllOrders extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //return to staff home
     private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
         StaffHome sh = new StaffHome(staff);
         this.dispose();
         sh.setVisible(true);
     }//GEN-LAST:event_cmdBackActionPerformed
 
+    //view a specific order
     private void cmdViewOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdViewOrderActionPerformed
+        //if order is not selected
         if(tblOrders.getSelectedRow() == -1)
         {
+            //show message
             lblError.setText("Error: Please select an order");
         }
+        //order is selected
         else
         {
+            //set table model
             DefaultTableModel orders = (DefaultTableModel) tblOrders.getModel();
-            int orderId = Integer.parseInt(String.valueOf(orders.getValueAt(tblOrders.getSelectedRow(), 1)));
             
+            //get order information
+            int orderId = Integer.parseInt(String.valueOf(orders.getValueAt(tblOrders.getSelectedRow(), 1)));
             String username = String.valueOf(orders.getValueAt(tblOrders.getSelectedRow(), 0));
             Customer customer = customers.get(username);
             
+            //load view previous orderlines page
             ViewPreviousOrderLines vpol = new ViewPreviousOrderLines(staff, orderId, customer);
             this.dispose();
             vpol.setVisible(true);

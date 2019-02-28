@@ -13,7 +13,7 @@ import models.Customer;
  */
 public class Confirmation extends javax.swing.JFrame {
 
-    
+    //logged in customer
     private static Customer customer;
     
     /**
@@ -75,6 +75,7 @@ public class Confirmation extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //return the customer the the customer home page
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         CustomerHome ch = new CustomerHome(customer);
         this.dispose();

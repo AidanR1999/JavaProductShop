@@ -21,14 +21,20 @@ import models.User;
  */
 public class ViewPreviousOrderLines extends javax.swing.JFrame {
 
+    //logged in user
     private static User user;
+    
+    //customer with order
     private static Customer customer;
+    
+    //order id
     private static int orderId;
     
     /**
      * Creates new form CustomerPreviousOrder
      */
     public ViewPreviousOrderLines(User u, int orderId, Customer c) {
+        //set values
         this.user = u;
         this.customer = c;
         this.orderId = orderId;
@@ -36,32 +42,41 @@ public class ViewPreviousOrderLines extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         
+        //set table model
         DefaultTableModel orderLines = (DefaultTableModel) tblOrderLines.getModel();
         
+        //store order
         Order order = customer.getOrders().get(orderId);
         
+        //for every orderline in the order
         for(Map.Entry<Integer, OrderLine> olEntry : order.getOrderLines().entrySet())
         {
+            //get product from orderlines
             OrderLine orderLine = olEntry.getValue();
             Product product = orderLine.getProduct();
             
+            //initialise product info
             String productId = "";
             String productName = "";
             String price = "";
             
+            //if product no longer exists
             if(product.getProductID() == 0)
             {
                 productId = "Not available";
                 productName = "Not available";
                 price = "Not available";
             }
+            //if product exists
             else
             {
+                //set product info
                 productId = String.valueOf(product.getProductID());
                 productName = product.toString();
                 price = "£" + String.format("%.02f", product.getPrice());
             }
             
+            //add product info to table
             orderLines.addRow(new Object[] { productId, productName, price });
         }
     }
@@ -140,13 +155,16 @@ public class ViewPreviousOrderLines extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //return to previous page
     private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
+        //if logged in user is customer, return to customer previous orders page
         if(user.getClass().getName().equals("models.Customer"))
         {
             CustomerPreviousOrders cpo = new CustomerPreviousOrders((Customer) user);
             this.dispose();
             cpo.setVisible(true);
         }
+        //if logged in user is staff, return to staff view all orders page
         else
         {
             StaffViewAllOrders svao = new StaffViewAllOrders((Staff) user);

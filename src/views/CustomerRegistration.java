@@ -218,7 +218,9 @@ public class CustomerRegistration extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //register the customer
     private void cmdSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdSubmitActionPerformed
+        //get the user input
         String Username = txtUsername.getText();
         String Password = txtPassword.getText();
         String Forename = txtForename.getText();
@@ -228,20 +230,30 @@ public class CustomerRegistration extends javax.swing.JFrame {
         String Town = txtTown.getText();
         String Postcode = txtPostcode.getText();
         
+        //if any text box has no data
         if(Username.equals("") || Password.equals("") || Forename.equals("") || Surname.equals("") ||
             AddressLine1.equals("") || AddressLine2.equals("") || Town.equals("") || Postcode.equals(""))
+            //show error
             lblError.setText("Please complete all fields");
+        
+        //else register the customer
         else
         {
             try 
             {
+                //create customer using data
                 Customer customer = new Customer(AddressLine1, AddressLine2, Town, Postcode, true, Username, Password, Forename, Surname);
                 
+                //create instance of database
                 DBManager db = new DBManager();
+                
+                //if registration is successful
                 if(db.registerCustomer(customer))
                 {
+                    //show message
                     lblError.setText("Registration Successful");
                     
+                    //clear text boxes
                     txtUsername.setText("");
                     txtPassword.setText("");
                     txtForename.setText("");
@@ -251,8 +263,10 @@ public class CustomerRegistration extends javax.swing.JFrame {
                     txtTown.setText("");
                     txtPostcode.setText("");
                 }
+                //if registration fails
                 else
                 {
+                    //show error
                     lblError.setText("Username already registered");
                 }
             } 
@@ -263,14 +277,16 @@ public class CustomerRegistration extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cmdSubmitActionPerformed
 
+    //return to customer login
     private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
         CustomerLogin cl = new CustomerLogin();
         this.dispose();
         cl.setVisible(true);
     }//GEN-LAST:event_cmdBackActionPerformed
 
+    //Clearing the text boxes
     private void cmdClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdClearActionPerformed
-        //Clearing the text boxes
+        
         txtForename.setText("");
         txtAddressLine1.setText("");
         txtPassword.setText("");

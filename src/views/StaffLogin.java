@@ -124,27 +124,35 @@ public class StaffLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //return to main menu
     private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
         MainMenu mm = new MainMenu();
         this.dispose();
         mm.setVisible(true);
     }//GEN-LAST:event_cmdBackActionPerformed
 
+    //log the staff memeber in
     private void cmdLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLoginActionPerformed
+        //get user input
         String Username = txtUsername.getText();
         String Password = txtPassword.getText();
         
+        //attempt to log in staff
         DBManager db = new DBManager();
         Staff s = db.staffLogin(Username, Password);
         
+        //if staff has data
         if(s != null)
         {
+            //load staff home page
             StaffHome sh = new StaffHome(s);
             this.dispose();
             sh.setVisible(true);
         }
+        //staff is null, incorrent login details
         else
         {
+            //show error
             lblErrorMessage.setText("Error: Incorrect username or password");
         }
     }//GEN-LAST:event_cmdLoginActionPerformed

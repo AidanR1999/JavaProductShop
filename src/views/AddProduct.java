@@ -18,6 +18,7 @@ import models.Staff;
 public class AddProduct extends javax.swing.JFrame {
 
     
+    //declare the variables
     private static Staff staff;
     private ButtonGroup bg;
     
@@ -29,10 +30,12 @@ public class AddProduct extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         
+        //populate radio buttons
         bg = new ButtonGroup();
         bg.add(rdoClothing);
         bg.add(rdoFootwear);
         
+        //hide additional property
         lblMeasureSize.setVisible(false);
         txtMeasureSize.setVisible(false);
     }
@@ -205,69 +208,97 @@ public class AddProduct extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //return to the modeify products page
     private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
         ModifyProducts vps = new ModifyProducts(staff);
         this.dispose();
         vps.setVisible(true);
     }//GEN-LAST:event_cmdBackActionPerformed
 
+    //if radio button clothing selected
     private void rdoClothingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoClothingActionPerformed
+        //show additional property
         lblMeasureSize.setVisible(true);
         txtMeasureSize.setVisible(true);
         
+        //set label to measurement
         lblMeasureSize.setText("Measuremeant:");
     }//GEN-LAST:event_rdoClothingActionPerformed
 
+    //if radio button footwear selected
     private void rdoFootwearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoFootwearActionPerformed
+        //show additional property
         lblMeasureSize.setVisible(true);
         txtMeasureSize.setVisible(true);
         
+        //set label to size
         lblMeasureSize.setText("Size:");
     }//GEN-LAST:event_rdoFootwearActionPerformed
 
+    //clears the user input on the page
     private void cmdClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdClearActionPerformed
+        //clear text boxes
         txtName.setText("");
         txtPrice.setText("");
         txtStockLevel.setText("");
         txtMeasureSize.setText("");
         
+        //clear radio button selection
         bg.clearSelection();
         
+        //hide additional property
         lblMeasureSize.setVisible(false);
         txtMeasureSize.setVisible(false);
     }//GEN-LAST:event_cmdClearActionPerformed
 
+    //add the product to database, check user input
     private void cmdSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdSubmitActionPerformed
+        //get the user input
         String name = txtName.getText();
         String price = txtPrice.getText();
         String stockLevel = txtStockLevel.getText();
         String MeasureSize = txtMeasureSize.getText();
         
+        //new instance of database
         DBManager db = new DBManager();
         
+        //if no radio button is selected show error
         if(!rdoClothing.isSelected() && !rdoFootwear.isSelected()) 
             lblErrorMessage.setText("Error: Please select type of product");
+        
+        //if text boxes are empty show error
         else if(name.equals("") || price.equals("") || stockLevel.equals("") || MeasureSize.equals(""))
             lblErrorMessage.setText("Error: Please fill out all data");
+        
+        
+        //if all text boxes have data
         else
         {
             try 
             {
+                //store price as a double
                 double doublePrice = Double.parseDouble(price);
                 
                 try 
                 {
+                    //store stock level as integer
                     int intStockLevel = Integer.parseInt(stockLevel);
                     
+                    //if footwear radio buttin is selected
                     if(rdoFootwear.isSelected())
                     {
                         try 
                         {
+                            //store size as int
                             int intSize = Integer.parseInt(MeasureSize);
                             
+                            //create footwear
                             Footwear f = new Footwear(intSize, name, doublePrice, intStockLevel);
+                            
+                            //add footwear to database
                             db.addProduct(f);
                             
+                            //load modify products page
                             ModifyProducts mp = new ModifyProducts(staff);
                             this.dispose();
                             mp.setVisible(true);
@@ -278,11 +309,14 @@ public class AddProduct extends javax.swing.JFrame {
                             lblErrorMessage.setText("Error: Please enter number for size");
                         }
                     }
+                    //else clothing radio button selected
                     else
                     {
+                        //create clothing and add to database
                         Clothing c = new Clothing(MeasureSize, name, doublePrice, intStockLevel);
                         db.addProduct(c);
                         
+                        //load modofiy products page
                         ModifyProducts mp = new ModifyProducts(staff);
                         this.dispose();
                         mp.setVisible(true);

@@ -18,25 +18,33 @@ import models.OrderLine;
  */
 public class ViewBasket extends javax.swing.JFrame {
 
+    //logged in customer
     private static Customer customer;
+    
+    //current order
     private Order order;
     
     /**
      * Creates new form ViewBasket
      */
     public ViewBasket(Customer c) {
+        //set values
         customer = c;
         order = c.findLatestOrder();
         
         initComponents();
         this.setLocationRelativeTo(null);
         
+        //set basket table model
         DefaultTableModel basket = (DefaultTableModel) tblProducts.getModel();
         
+        //for every orderline in order
         for(Map.Entry<Integer, OrderLine> ol : order.getOrderLines().entrySet())
         {
+            //store orderline of current iteration
             OrderLine actualOrderLine = ol.getValue();
             
+            //add orderline to table
             basket.addRow(new Object[]
                 {actualOrderLine.getProduct().getProductID(), 
                 actualOrderLine.getProduct(), 
@@ -44,7 +52,10 @@ public class ViewBasket extends javax.swing.JFrame {
                 "£" + String.format("%.02f", actualOrderLine.getProduct().getPrice() * actualOrderLine.getQuantity())});
         } 
         
+        //show table
         tblProducts.setModel(basket);
+        
+        //show order total
         lblTotal.setText("£" + String.format("%.02f", order.getOrderTotal()));
     }
 
@@ -155,43 +166,63 @@ public class ViewBasket extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //return to view products
     private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
         ViewProducts vp = new ViewProducts(customer);
         this.dispose();
         vp.setVisible(true);
     }//GEN-LAST:event_cmdBackActionPerformed
 
+    //user makes purchase of order
     private void cmdPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdPurchaseActionPerformed
+        //if the table has values
         if(tblProducts.contains(0,0))
         {
+            //update status of order
             order.setStatus("Complete");
 
+            //update order information in the database
             DBManager db = new DBManager();
             db.completeOrder(order.getOrderId());
             order.updateStockLevel();
 
+            //load confirmation page
             Confirmation confirmation = new Confirmation(customer);
             this.dispose();
             confirmation.setVisible(true);
         }
     }//GEN-LAST:event_cmdPurchaseActionPerformed
 
+    //removing a product from the basket
     private void cmdRemoveProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdRemoveProductActionPerformed
+        //if the user has not selected a product
         if(tblProducts.getSelectedRow() == -1)
         {
+            //show error
             lblErrorMessage.setText("Error: Select a product");
         }
+        //user has selected a product in the table
         else
         {
+            //set basket table model
             DefaultTableModel basketModel = (DefaultTableModel) tblProducts.getModel();
+            
+            //store product Id
             int productId = Integer.parseInt(String.valueOf(basketModel.getValueAt(tblProducts.getSelectedRow(), 0)));
             
+            //remove orderline from database
             order.removeOrderLine(productId);
+            
+            //show message
             lblErrorMessage.setText("Product removed from basket");
             
+            //refresh basket table model
             DefaultTableModel basket = (DefaultTableModel) tblProducts.getModel();
+            
+            //remove row from table
             basket.removeRow(tblProducts.getSelectedRow());
             
+            //display orderline information
             tblProducts.setModel(basket);
             lblTotal.setText("£" + String.format("%.02f", order.getOrderTotal()));
         }

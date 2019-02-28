@@ -99,18 +99,21 @@ public class MainMenu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //load customer login page
     private void cmdCustomerLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCustomerLoginActionPerformed
         CustomerLogin cl = new CustomerLogin();
         this.dispose();
         cl.setVisible(true);
     }//GEN-LAST:event_cmdCustomerLoginActionPerformed
 
+    //load staff login page
     private void cmdStaffLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdStaffLoginActionPerformed
         StaffLogin sl = new StaffLogin();
         this.dispose();
         sl.setVisible(true);
     }//GEN-LAST:event_cmdStaffLoginActionPerformed
 
+    //load view products page
     private void cmdViewProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdViewProductsActionPerformed
         ViewProducts vp = new ViewProducts(new Customer());
         this.dispose();

@@ -13,7 +13,7 @@ import models.Staff;
  */
 public class StaffHome extends javax.swing.JFrame {
 
-    
+    //logged in staffS
     private static Staff staff;
     
     /**
@@ -102,18 +102,21 @@ public class StaffHome extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //log staff memeber out, return to login page
     private void cmdLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLogoutActionPerformed
         StaffLogin sl = new StaffLogin();
         this.dispose();
         sl.setVisible(true);
     }//GEN-LAST:event_cmdLogoutActionPerformed
 
+    //load modify products page
     private void cmdModifyProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdModifyProductsActionPerformed
         ModifyProducts vps = new ModifyProducts(staff);
         this.dispose();
         vps.setVisible(true);
     }//GEN-LAST:event_cmdModifyProductsActionPerformed
 
+    //load view all orders page
     private void cmdViewAllOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdViewAllOrdersActionPerformed
         StaffViewAllOrders svao = new StaffViewAllOrders(staff);
         this.dispose();
