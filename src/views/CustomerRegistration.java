@@ -295,6 +295,7 @@ public class CustomerRegistration extends javax.swing.JFrame {
         txtSurname.setText("");
         txtTown.setText("");
         txtUsername.setText("");
+        lblError.setText("");
     }//GEN-LAST:event_cmdClearActionPerformed
 
     /**

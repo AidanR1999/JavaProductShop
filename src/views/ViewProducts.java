@@ -113,7 +113,7 @@ public class ViewProducts extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(lstProducts);
 
-        jLabel2.setText("Product Type");
+        jLabel2.setText("Categories");
 
         jLabel3.setText("Products");
 
